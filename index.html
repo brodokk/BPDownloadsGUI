@@ -1,13 +1,13 @@
 <!DOCTYPE html>
 <html lang="en" prefix="og: https://ogp.me/ns#">
     <head>
-        <title>Downloads - Bob Pony</title>
-        <meta property="og:title" content="Downloads - Bob Pony" />
+        <title>Downloads proxy</title>
+        <meta property="og:title" content="Downloads proxy" />
         <meta property="og:type" content="website" />
-        <meta property="og:url" content="https://downloadui.bobpony.com" />
+        <meta property="og:url" content="https://downloadui.alicorn.network" />
         <meta
             property="og:description"
-            content="Download software from Bob Pony's massive software repository with ease."
+            content="Download softwares from different repositories."
         />
         <meta property="theme-color" content="#85fb65" />
         <meta charset="UTF-8" />
@@ -59,7 +59,7 @@
 
             <div id="navbarBasicExample" class="navbar-menu">
                 <div class="navbar-start">
-                    <a href="https://bobpony.com" class="navbar-item">
+                    <a href="https://alicorn.network" class="navbar-item home-url">
                         <span class="icon-text">
                             <span class="icon">
                                 <i class="fas fa-home"></i>
@@ -78,8 +78,8 @@
                         </a>
                         <div class="navbar-dropdown">
                             <a
-                                href="https://downloadui.bobpony.com"
-                                class="navbar-item is-active"
+                                href="https://downloadui.alicorn.network"
+                                class="navbar-item is-active url"
                             >
                                 <span class="icon-text">
                                     <span class="icon">
@@ -89,7 +89,7 @@
                                 </span>
                             </a>
                             <a
-                                href="https://dl.bobpony.com"
+                                href="/files"
                                 class="navbar-item"
                             >
                                 <span class="icon-text">
@@ -99,84 +99,19 @@
                                     <span>Directory Listing</span>
                                 </span>
                             </a>
-                        </div>
-                    </div>
-                    <div class="navbar-item has-dropdown is-hoverable">
-                        <a class="navbar-link">
-                            <span class="icon-text">
-                                <span class="icon">
-                                    <i class="fas fa-cubes"></i>
-                                </span>
-                                <span>More</span>
-                            </span>
-                        </a>
-                        <div class="navbar-dropdown">
                             <a
-                                href="https://video.bobpony.com"
+                                href="/repositories.json"
                                 class="navbar-item"
                             >
                                 <span class="icon-text">
                                     <span class="icon">
-                                        <i class="fas fa-film"></i>
+                                        <i class="fas fa-list"></i>
                                     </span>
-                                    <span>Video Archives</span>
-                                </span>
-                            </a>
-                            <a
-                                href="https://github.com/TheBobPony"
-                                class="navbar-item"
-                            >
-                                <span class="icon-text">
-                                    <span class="icon">
-                                        <i class="fab fa-github"></i>
-                                    </span>
-                                    <span>GitHub profile</span>
-                                </span>
-                            </a>
-                            <a
-                                href="https://github.com/TheBobPony/bobpony.com"
-                                class="navbar-item"
-                            >
-                                <span class="icon-text">
-                                    <span class="icon">
-                                        <i class="fas fa-code"></i>
-                                    </span>
-                                    <span>View this site on GitHub</span>
+                                    <span>Repository Listing</span>
                                 </span>
                             </a>
                         </div>
                     </div>
-                </div>
-
-                <div class="navbar-end">
-                    <a
-                        href="https://www.youtube.com/channel/UCAZzz2Dd9Xh6vTjNcxhqPZw"
-                        class="navbar-item has-tooltip-bottom"
-                        data-tooltip="YouTube"
-                    >
-                        <i class="fab fa-youtube"></i>
-                    </a>
-                    <a
-                        href="https://twitter.com/TheBobPony"
-                        class="navbar-item has-tooltip-bottom"
-                        data-tooltip="Twitter"
-                    >
-                        <i class="fab fa-twitter"></i>
-                    </a>
-                    <a
-                        href="https://discord.me/bobpony"
-                        class="navbar-item has-tooltip-bottom"
-                        data-tooltip="Discord Server"
-                    >
-                        <i class="fab fa-discord"></i>
-                    </a>
-                    <a
-                        href="mailto:contact@bobpony.com"
-                        class="navbar-item has-tooltip-bottom"
-                        data-tooltip="Email"
-                    >
-                        <i class="fas fa-envelope"></i>
-                    </a>
                 </div>
             </div>
         </div>
@@ -191,7 +126,24 @@
                             class="columns is-desktop is-vcentered is-centered"
                         >
                             <div class="column is-narrow">
-                                <h1 class="title">Downloads</h1>
+                                <h1 class="title">Mirrored repository</h1>
+                                <p class="dropdown">
+                                    <select
+                                        class="dropdown-item"
+                                        name="Repository"
+                                        id="repository"
+                                        autocomplete="off"
+                                        onchange="updateRepositories()"
+                                    >
+                                        <option
+                                            selected
+                                            value="local"
+                                        >
+                                            Local
+                                        </option>
+                                    </select>
+                                </p>
+                                <h2 class="title">Downloads</h1>
                                 <p class="dropdown">
                                     <select
                                         class="dropdown-item"
@@ -249,24 +201,31 @@
                                 <p class="button" id="downloadP">
                                     <a id="download">DOWNLOAD</a>
                                 </p>
-                                <p>
-                                    Note: If you need to enter a password, try
-                                    <span style="font-family: monospace"
-                                        >bigcdn</span
-                                    >.
+                                <p id="note">
                                 </p>
+                                <p id="version">
+                                    Last update: <span></span>.</p>
+                                <br>
                                 <p>
                                     Want to help us out with the site?
                                     <a
-                                        href="https://github.com/TheBobPony/BPDownloadsGUI"
+                                        href="https://github.com/brodokk/BPDownloadsGUI"
                                         >Check out the repo!</a
                                     >
                                 </p>
                                 <p>
                                     Want to check out the original files?
-                                    <a href="https://dl.bobpony.com"
+                                    <a class="origin-files-url" href="/files"
                                         >Click here to go to the Downloads
                                         page!</a
+                                    >
+                                </p>
+                                <br>
+                                <p>
+                                    This is a fork of the project BPDownloadsGUI made by Bob Pony.
+                                    <a
+                                        href="https://github.com/TheBobPony/BPDownloadsGUI"
+                                        >Check out the repo!</a
                                     >
                                 </p>
                             </div>

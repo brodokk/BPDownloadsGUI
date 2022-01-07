@@ -1,0 +1,12 @@
+{
+    "Bob Pony": {
+        "website": "https://downloadui.bobpony.com/",
+        "source": "https://raw.githubusercontent.com/TheBobPony/BPDownloadsGUI/master/products.json",
+        "note": "If you need to enter a password, try bigcdn."
+    },
+    "QuanTrieuPCYT": {
+        "website": "https://github.com/QuanTrieuPCYT/SmartDownload",
+        "source": "https://raw.githubusercontent.com/QuanTrieuPCYT/SmartDownload/master/products.json",
+        "note": "NOT SAFE FOR NOW"
+    }
+}

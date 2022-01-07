@@ -7,17 +7,61 @@ if (msie > 0 || !!navigator.userAgent.match(/Trident.*rv:11\./)) window.location
 
 let productList = {};
 
+const repositoryObj = document.querySelector("#repository");
 const typeObj = document.querySelector("#type");
 const versionObj = document.querySelector("#version");
 const editionObj = document.querySelector("#edition");
 const downloadURL = document.querySelector("#download");
 
-fetch("/products.json").then(data => data.json().then(products => {
-	productList = products;
-	for (const i in products) {
-		typeObj.append(new Option(i, i));
+fetch("/repositories.json").then(data => data.json().then(repositories => {
+	repositoryList = repositories;
+	for (const i in repositories) {
+		repositoryObj.append(new Option(i, i));
 	}
 }));
+
+fetch("/version.txt").then(data => data.text().then(version => {
+	if (data.ok) {
+		version = version;
+	} else {
+		version = "never";
+	}
+	document.querySelector("#version span").textContent = version;
+}));
+
+const updateRepositories = () => {
+	repositoryFile = repositoryObj.value.toLowerCase().replace(/\s/g, "_") + ".json";
+	repositoryPath = "repositories/" + repositoryFile;
+
+	cleanUpdateType();
+
+	if (repositoryObj.value == 'local') {
+		document.querySelector("#note").textContent = "";
+		return;
+	}
+
+	note = repositoryList[repositoryObj.value].note;
+	document.querySelector("#note").textContent = "Note: " + note;
+
+	fetch(repositoryPath).then(data => data.json().then(products => {
+		productList = products;
+		for (const i in products) {
+			typeObj.append(new Option(i, i));
+		}
+	}));
+
+	updateVersions();
+};
+
+const cleanUpdateType = () => {
+	let typeOptions = document.querySelectorAll("#type option");
+
+	for (const i of typeOptions) {
+		if (!i.disabled) i.remove();
+	}
+
+	document.querySelector("#type option[value='placeholder']").selected = true;
+}
 
 const updateVersions = () => {
 	const versionOptions = document.querySelectorAll("#version option");
