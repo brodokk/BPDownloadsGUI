@@ -9,9 +9,6 @@ from colored import attr, bg, fg
 from lxml import html
 from tqdm import tqdm
 
-with open('repositories/bob_pony.json', 'r') as f:
-    data = json.load(f)
-
 base = 'files'
 
 def dl(filepath, name, k, v, need_dl):
