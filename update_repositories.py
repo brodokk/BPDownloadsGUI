@@ -70,6 +70,14 @@ def read_dict(data, name=""):
         now = datetime.datetime.now().strftime("%m/%d/%Y, %H:%M:%S")
         f.write(now)
 
+def load_repositories():
+    path = 'repositories'
+    filenames = next(os.walk(path), (None, None, []))[2]
+    for filename in filenames:
+        file = path + "/" + filename
+        if file.endswith('.json'):
+            with open(file) as f:
+                data = json.load(f)
+                read_dict(data, os.path.splitext(filename)[0])
 
-
-read_dict(data)
+load_repositories()
