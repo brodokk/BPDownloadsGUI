@@ -96,7 +96,10 @@ const updateEditions = () => {
 
 const updateURL = () => {
 	if (typeObj.value && versionObj.value && editionObj.value) {
-		const url = productList[typeObj.value][versionObj.value][editionObj.value];
+		const directoryUrl = '/files';
+		const baseUrl = directoryUrl + '/' + repositoryObj.value.toLowerCase().replace(' ', '_');
+		let url = productList[typeObj.value][versionObj.value][editionObj.value];
+		url = url.replace(/^.*\/\/[^\/]+/, baseUrl);
 		downloadURL.href = url;
 	} else {
 		downloadURL.removeAttr("href");

@@ -3,6 +3,7 @@ import datetime
 import json
 import os
 from pathlib import Path
+from urllib.parse import urlparse
 
 import requests
 from colored import attr, bg, fg
@@ -20,7 +21,7 @@ def dl(filepath, name, k, v, need_dl):
             os.makedirs(os.path.dirname(filepath))
         status = '%sMISSING%s' % (fg('red'), attr('reset'))
         need_dl = True
-    print(name + "/" + k + ' --> ' + status)
+    print(name.replace('/', ' - ') + " - " + k + ' --> ' + status)
     if need_dl:
         url = v
         # Streaming, so we can iterate over the response.
@@ -36,7 +37,7 @@ def dl(filepath, name, k, v, need_dl):
         if total_size_in_bytes != 0 and progress_bar.n != total_size_in_bytes:
             print("ERROR, something went wrong")
 
-def read_dict(data, name=""):
+def read_dict(data, name, repository):
     rname = False
     for k, v in data.items():
         if isinstance(v, dict):
@@ -44,20 +45,18 @@ def read_dict(data, name=""):
                 name = os.path.dirname(name) + '/' + k.replace('/', '\/')
             else:
                 name = name + "/" + k.replace('/', '\/')
-            name = '/' + name.lstrip('/')
-            read_dict(v, name)
+            name = name.lstrip('/')
+            read_dict(v, name, repository)
         else:
+            filepath = base + "/" + repository + urlparse(v).path
             need_dl = False
-            filename = os.path.basename(v)
-            filepath = base + '/' + name + "/" + filename
             if filepath.endswith('/'):
                 response = requests.get(v)
                 webpage = html.fromstring(response.content)
                 href = webpage.xpath('//a/@href')
                 files = [x for x in href if '../' not in x]
                 for f in files:
-                    filename = f
-                    filepath = base + '/' + name + '/' + k.replace('/', '\/') + '/' + filename
+                    filepath = base + "/" + repository + urlparse(v).path + f
                     dl(filepath, name, k, v, need_dl)
             else:
                 dl(filepath, name, k, v, need_dl)
@@ -75,6 +74,6 @@ def load_repositories():
         if file.endswith('.json'):
             with open(file) as f:
                 data = json.load(f)
-                read_dict(data, os.path.splitext(filename)[0])
+                read_dict(data, "", os.path.splitext(filename)[0])
 
 load_repositories()
