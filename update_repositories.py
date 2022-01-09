@@ -70,10 +70,6 @@ def load_repositories():
     with open('repositories.json') as f:
         repositories = json.load(f)
         for repo_name, repo_data in repositories.items():
-            print(repo_name)
-            print(repo_data)
-            if repo_name != "Local":
-                continue
             if 'repository' in repo_data:
                 with open(repo_data['repository']) as f:
                     data = json.load(f)
