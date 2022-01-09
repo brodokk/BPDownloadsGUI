@@ -1,7 +1,12 @@
 {
+    "Local": {
+        "repository": "repositories/local.json"
+    },
     "Bob Pony": {
         "website": "https://downloadui.bobpony.com/",
         "source": "https://raw.githubusercontent.com/TheBobPony/BPDownloadsGUI/master/products.json",
-        "note": "If you need to enter a password, try bigcdn."
+        "note": "If you need to enter a password, try bigcdn.",
+        "README": "https://dl.bobpony.com/README.txt",
+        "repository": "repositories/bob_pony.json"
     }
 }

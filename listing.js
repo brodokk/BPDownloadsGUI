@@ -18,6 +18,7 @@ fetch("/repositories.json").then(data => data.json().then(repositories => {
 	for (const i in repositories) {
 		repositoryObj.append(new Option(i, i));
 	}
+	updateRepositories()
 }));
 
 fetch("/version.txt").then(data => data.text().then(version => {

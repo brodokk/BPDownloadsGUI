@@ -67,13 +67,18 @@ def read_dict(data, name, repository):
         f.write(now)
 
 def load_repositories():
-    path = 'repositories'
-    filenames = next(os.walk(path), (None, None, []))[2]
-    for filename in filenames:
-        file = path + "/" + filename
-        if file.endswith('.json'):
-            with open(file) as f:
-                data = json.load(f)
-                read_dict(data, "", os.path.splitext(filename)[0])
+    with open('repositories.json') as f:
+        repositories = json.load(f)
+        for repo_name, repo_data in repositories.items():
+            print(repo_name)
+            print(repo_data)
+            if repo_name != "Local":
+                continue
+            if 'repository' in repo_data:
+                with open(repo_data['repository']) as f:
+                    data = json.load(f)
+                    if 'README' in repo_data:
+                        data['README'] = repo_data['README']
+                    read_dict(data, "", Path(repo_data['repository']).stem)
 
 load_repositories()
