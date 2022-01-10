@@ -13,10 +13,17 @@ const versionObj = document.querySelector("#version");
 const editionObj = document.querySelector("#edition");
 const downloadURL = document.querySelector("#download");
 
+const mirror_str = ' (Local mirror)'
+
+var is_url = new RegExp('^(?:[a-z]+:)?//', 'i');
+
 fetch("/repositories.json").then(data => data.json().then(repositories => {
 	repositoryList = repositories;
-	for (const i in repositories) {
-		repositoryObj.append(new Option(i, i));
+	for (let [repo_name, repo_data] of Object.entries(repositories)) {
+		if (repo_name.toLowerCase() != "local" && !is_url.test(repo_data['repository'])) {
+			repo_name = repo_name + mirror_str;
+		}
+		repositoryObj.append(new Option(repo_name, repo_name));
 	}
 	updateRepositories()
 }));
@@ -31,17 +38,17 @@ fetch("/version.txt").then(data => data.text().then(version => {
 }));
 
 const updateRepositories = () => {
-	repositoryFile = repositoryObj.value.toLowerCase().replace(/\s/g, "_") + ".json";
-	repositoryPath = "repositories/" + repositoryFile;
+	repo_name = repositoryObj.value.replace(mirror_str, '')
+
+	repositoryPath = repositoryList[repo_name].repository;
 
 	cleanUpdateType();
 
-	if (repositoryObj.value == 'local') {
+	if (repositoryObj.value.toLowerCase() == 'local') {
 		document.querySelector("#note").textContent = "";
-		return;
 	}
 
-	note = repositoryList[repositoryObj.value].note;
+	note = repositoryList[repo_name].note;
 	document.querySelector("#note").textContent = "Note: " + note;
 
 	fetch(repositoryPath).then(data => data.json().then(products => {
@@ -50,7 +57,7 @@ const updateRepositories = () => {
 			typeObj.append(new Option(i, i));
 		}
 	}));
-
+	
 	updateVersions();
 };
 
@@ -88,19 +95,24 @@ const updateEditions = () => {
 
 	document.querySelector("#edition option[value='placeholder']").selected = true;
 
-	for (let i in productList[typeObj.value][versionObj.value]) {
-		editionObj.append(new Option(i, i));
+	if (Object.keys(productList).length !== 0) {
+		for (let i in productList[typeObj.value][versionObj.value]) {
+			editionObj.append(new Option(i, i));
+		}
+		updateURL();
 	}
 
-	updateURL();
 };
 
 const updateURL = () => {
 	if (typeObj.value && versionObj.value && editionObj.value) {
+		repo_name = repositoryObj.value.replace(mirror_str, '')
 		const directoryUrl = '/files';
-		const baseUrl = directoryUrl + '/' + repositoryObj.value.toLowerCase().replace(' ', '_');
+		const baseUrl = directoryUrl + '/' + repo_name.toLowerCase().replace(' ', '_');
 		let url = productList[typeObj.value][versionObj.value][editionObj.value];
-		url = url.replace(/^.*\/\/[^\/]+/, baseUrl);
+		if (!is_url.test(repository)) {
+			url = url.replace(/^.*\/\/[^\/]+/, baseUrl);
+		}
 		downloadURL.href = url;
 	} else {
 		downloadURL.removeAttr("href");
