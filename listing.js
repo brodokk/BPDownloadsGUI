@@ -108,9 +108,9 @@ const updateURL = () => {
 	if (typeObj.value && versionObj.value && editionObj.value) {
 		repo_name = repositoryObj.value.replace(mirror_str, '')
 		const directoryUrl = '/files';
-		const baseUrl = directoryUrl + '/' + repo_name.toLowerCase().replace(' ', '_');
 		let url = productList[typeObj.value][versionObj.value][editionObj.value];
 		if (!is_url.test(repository)) {
+			const baseUrl = directoryUrl + '/' + repo_name.toLowerCase().replace(' ', '_');
 			url = url.replace(/^.*\/\/[^\/]+/, baseUrl);
 		}
 		downloadURL.href = url;
